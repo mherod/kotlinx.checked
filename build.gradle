@@ -1,0 +1,51 @@
+buildscript {
+    ext {
+        kotlinx_coroutines_version = '1.2.0-alpha-2'
+        dagger_version = '2.22.1'
+        java_version = '1.8'
+        google_auto_value = '1.6.2'
+        versions = [
+                java                : java_version,
+                junit               : '4.13-beta-2',
+        ]
+    }
+    ext.kotlin_version = '1.3.21'
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+        maven { url 'https://jitpack.io' }
+    }
+    configurations {
+        implementation {
+            withDependencies { DependencySet dependencies ->
+                dependencies.findAll { it.group == 'com.google.auto.value' }.each {
+                    it.version { strictly '1.6.2' }
+                }
+            }
+        }
+    }
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'com.google.auto.value') {
+                details.useVersion '1.6.2'
+                details.because 'Deps were on fire'
+            }
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

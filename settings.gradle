@@ -1,0 +1,2 @@
+include ':codegen-annotation', ':codegen-processor', 'example'
+rootProject.name = 'kotlinx.checked'
