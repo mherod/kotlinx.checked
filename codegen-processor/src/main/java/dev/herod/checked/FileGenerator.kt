@@ -15,6 +15,8 @@ class FileGenerator : AbstractProcessor() {
     override fun getSupportedAnnotationTypes(): MutableSet<String> = mutableSetOf(
             Checked::class.java.name,
             CheckedNonNull::class.java.name,
+        CheckedNonEmpty::class.java.name,
+        CheckedNonBlank::class.java.name,
             CheckedOrEmpty::class.java.name
     )
 
