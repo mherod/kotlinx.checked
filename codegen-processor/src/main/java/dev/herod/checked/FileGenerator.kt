@@ -13,11 +13,11 @@ import javax.lang.model.element.TypeElement
 class FileGenerator : AbstractProcessor() {
 
     override fun getSupportedAnnotationTypes(): MutableSet<String> = mutableSetOf(
-            Checked::class.java.name,
-            CheckedNonNull::class.java.name,
+        Checked::class.java.name,
+        CheckedNonNull::class.java.name,
         CheckedNonEmpty::class.java.name,
         CheckedNonBlank::class.java.name,
-            CheckedOrEmpty::class.java.name
+        CheckedOrEmpty::class.java.name
     )
 
     override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.latest()
@@ -30,25 +30,25 @@ class FileGenerator : AbstractProcessor() {
                 val packageName = processingEnv.elementUtils.getPackageOf(element).toString()
 
                 val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
-                        ?: "app/src/main/java/"
+                    ?: "app/src/main/java/"
 
                 val dir = kaptKotlinGeneratedDir.replace("kaptKotlin", "kapt") +
                         "/" +
                         packageName.replace('.', '/')
 
                 val fileSpec = KotlinClassBuilder(
-                        throws = true,
-                        roundEnvironment = roundEnvironment,
-                        allNonNullElements = listOfNotNull(
-                                checkedNonNullElements,
-                                checkedNonEmptyElements,
-                                checkedNonBlankElements,
-                                checkedLengthElements,
-                                checkedRangeElements,
-                                checkedOrEmptyElements
-                        ).flatten().toSet(),
-                        className = element.asType(),
-                        elements = element.enclosedElements.filter { it.kName() != "defaultImpls" }
+                    throws = true,
+                    roundEnvironment = roundEnvironment,
+                    allNonNullElements = listOfNotNull(
+                        checkedNonNullElements,
+                        checkedNonEmptyElements,
+                        checkedNonBlankElements,
+                        checkedLengthElements,
+                        checkedRangeElements,
+                        checkedOrEmptyElements
+                    ).flatten().toSet(),
+                    className = element.asType(),
+                    elements = element.enclosedElements.filter { it.kName() != "defaultImpls" }
                 ).getContent()
 
                 val fileName = fileSpec.name
