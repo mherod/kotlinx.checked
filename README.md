@@ -9,19 +9,25 @@ kapt project(':codegen-processor')
 @Checked
 interface ExampleModel {
     @CheckedOrEmpty
-    val garbage: String?
-
-    @CheckedLength(atLeast = 4)
-    val poo: String?
-
-    @CheckedNonEmpty
-    val lol: String?
+    val stringOrEmptyIfNull: String?
 
     @CheckedNonNull
-    val another: String?
+    val stringNonNull: String?
+
+    @CheckedNonEmpty
+    val stringNonEmpty: String?
+
+    @CheckedNonBlank
+    val stringNonBlank: String?
+
+    @CheckedLength(atLeast = 4)
+    val stringAtLeastLengthFour: String?
+
+    @CheckedNonBlank
+    val lol: String?
 
     @CheckedRange(start = 0, endInclusive = 2)
-    val number: Int?
+    val numberBetweenZeroAndTwo: Int?
 
     @CheckedNonNull
     val child: ExampleModel?
@@ -31,26 +37,46 @@ interface ExampleModel {
 
 ```
 data class CheckedExampleModel(
-    override val garbage: String,
-    override val poo: String,
+    override val stringOrEmptyIfNull: String,
+    override val stringNonNull: String,
+    override val stringNonEmpty: String,
+    override val stringNonBlank: String,
+    override val stringAtLeastLengthFour: String,
     override val lol: String,
-    override val another: String,
-    override val number: Int,
-    override val child: ExampleModel
+    override val numberBetweenZeroAndTwo: Int,
+    override val child: dev.herod.checked.ExampleModel
 ) : ExampleModel
 
 fun ExampleModel?.checked(): CheckedExampleModel? {
-    if (this == null) throw IllegalArgumentException("ExampleModel was null")
-    val _garbage = garbage.orEmpty()
-    val _poo = poo?: throw IllegalArgumentException("poo was null")
+    if (this == null) throw IllegalArgumentException("dev.herod.checked.ExampleModel was null")
+    val _stringOrEmptyIfNull = stringOrEmptyIfNull.orEmpty()
+    // String
+    val _stringNonNull = stringNonNull?: throw IllegalArgumentException("stringNonNull was null")
+    // String
+    val _stringNonEmpty = stringNonEmpty?: throw IllegalArgumentException("stringNonEmpty was null")
+    if (_stringNonEmpty.isEmpty()) throw IllegalArgumentException("stringNonEmpty was empty")
+    // String
+    val _stringNonBlank = stringNonBlank?: throw IllegalArgumentException("stringNonBlank was null")
+    if (_stringNonBlank.isBlank()) throw IllegalArgumentException("stringNonBlank was blank")
+    // String
+    val _stringAtLeastLengthFour = stringAtLeastLengthFour?: throw
+            IllegalArgumentException("stringAtLeastLengthFour was null")
+    // String
     val _lol = lol?: throw IllegalArgumentException("lol was null")
-    if (_lol.isEmpty()) throw IllegalArgumentException("lol was empty")
-    val _another = another?: throw IllegalArgumentException("another was null")
-    val _number = number?: throw IllegalArgumentException("number was null")
-    val _child = child?: throw IllegalArgumentException("child was null")
+    if (_lol.isBlank()) throw IllegalArgumentException("lol was blank")
+    // String
+    val _numberBetweenZeroAndTwo = numberBetweenZeroAndTwo?: throw
+            IllegalArgumentException("numberBetweenZeroAndTwo was null")
+    // Int
+    val child_isThis = this == child
+    val _child = child?.let { if (child_isThis) it else it.checked() } ?: throw
+            IllegalArgumentException("child was null")
+    // dev.herod.checked.ExampleModel
     return try {
-        CheckedExampleModel(garbage = _garbage, poo = _poo, lol = _lol, another = _another, number =
-                _number, child = _child)
+        CheckedExampleModel(stringOrEmptyIfNull = _stringOrEmptyIfNull, stringNonNull =
+                _stringNonNull, stringNonEmpty = _stringNonEmpty, stringNonBlank = _stringNonBlank,
+                stringAtLeastLengthFour = _stringAtLeastLengthFour, lol = _lol,
+                numberBetweenZeroAndTwo = _numberBetweenZeroAndTwo, child = _child)
     }
     catch(throwable: Throwable) {
         null
