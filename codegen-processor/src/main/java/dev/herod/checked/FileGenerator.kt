@@ -1,6 +1,7 @@
 package dev.herod.checked
 
 import com.google.auto.service.AutoService
+import kotlinx.checked.*
 import java.io.File
 import javax.annotation.processing.*
 import javax.lang.model.SourceVersion

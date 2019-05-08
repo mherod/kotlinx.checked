@@ -1,4 +1,4 @@
-package dev.herod.checked
+package kotlinx.checked
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)
 @Retention(AnnotationRetention.SOURCE)

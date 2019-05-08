@@ -1,5 +1,7 @@
 package dev.herod.checked
 
+import kotlinx.checked.*
+
 @Checked
 interface ExampleModel {
     @CheckedOrEmpty
